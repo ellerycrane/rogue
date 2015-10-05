@@ -1,0 +1,55 @@
+{
+  "title": "Rogue",
+  "name": "rogue",
+  "version": "0.0.1",
+  "author": "Ellery Crane",
+  "description":"A roguelike... kinda",
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "browserify": {
+    "transform": [
+      "reactify",
+      "brfs"
+    ]
+  },
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-browserify": "*",
+    "grunt-cli": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-react": "*",
+    "grunt-sass": "*",
+    "grunt-contrib-sass": "*",
+    "grunt-contrib-compass":"*",
+    "grunt-shell": "*",
+    "grunt-config": "*",
+    "grunt-concurrent": "*",
+    "browserify": "*",
+    "grunt-browserify": "*",
+    "grunt-browserifying": "*",
+    "grunt-watchify": "*",
+    "grunt-autoprefixer":"*",
+    "js-yaml": "*",
+    "jquery": "*",
+    "react": "*",
+    "react-tools": "*",
+    "reactify": "*",
+    "flux": "*",
+    "keymirror": "*",
+    "immutable": "*",
+    "fluxxor": "*",
+    "underscore": "*",
+    "brfs":"*",
+    "classnames":"*"
+  }
+}

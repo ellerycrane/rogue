@@ -1,0 +1,7 @@
+node_modules
+.sass-cache
+.idea
+personal
+vector_art
+.DS_Store
+dist/.monster-manager*.js
