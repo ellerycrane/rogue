@@ -1,8 +1,90 @@
-console.log("Battle Time");
+var ROT = require('./rot.js');
+
+console.log("Bah humbug");
+
+class Combatant {
+    constructor(name, state) {
+        var self = this;
+        self._name = name;
+        self.hp = 100;
+        self.hitChance = 0.75;
+        self.gameState = state;
+    }
+
+    name() {
+        return this._name;
+    }
+
+    takeDamage(damage) {
+        var self = this,
+            log = self.gameState.log,
+            scheduler = self.gameState.scheduler;
+        self.hp -= damage;
+        if (self.hp <= 0) {
+            self.isDead = true;
+            console.log("%Name has died!".format(self));
+            scheduler.remove(self);
+        }
+    }
+
+    attack(monster) {
+        var self = this,
+            log = self.gameState.log;
+        if (ROT.RNG.getUniform() <= self.hitChance) {
+            var damage = Math.floor(ROT.RNG.getUniform() * 10) + 1;
+            console.log("%Name hits %Name for %s damage!".format(self, monster, damage));
+            monster.takeDamage(damage);
+        } else {
+            console.log("%Name misses %Name with an attack.".format(self, monster));
+        }
+    }
+
+    act() {
+        var self = this,
+            monsters = self.gameState.monsters,
+            scheduler = self.gameState.scheduler;
+        if (monsters.length == 0) {
+            scheduler.remove(self);
+        } else {
+            self.attack(monsters.random());
+        }
+    }
+}
+
+class MonsterCombatant extends Combatant {
+    constructor(name, state) {
+        super("MONSTER: "+name, state);
+    }
+
+    attack(player) {
+        var self = this,
+            log = self.gameState.log;
+        if (ROT.RNG.getUniform() <= self.hitChance) {
+            var damage = Math.floor(ROT.RNG.getUniform() * 10) + 1;
+            console.log("%Name hits %Name for %s damage!".format(self, player, "" + damage));
+            player.takeDamage(damage);
+        } else {
+            console.log("%Name misses %Name with an attack.".format(self, player));
+        }
+    }
+
+    act() {
+        var self = this,
+            player = self.gameState.player,
+            scheduler = self.gameState.scheduler;
+        if (player.isDead) {
+            scheduler.remove(self);
+        } else {
+            self.attack(player);
+        }
+    }
+
+}
 
 var monsterTypes = ['orc', 'goblin', 'giant rat', 'giant spider', 'kobold'];
 
-var SHOW = function(str){
+
+var SHOW = function (str) {
     console.log(str);
 };
 //
@@ -19,7 +101,7 @@ var state = {
     scheduler: scheduler,
     engine: engine
 };
-var Player = function(name, gameState){
+var Player = function (name, gameState) {
     var self = this;
     self._name = name;
     self.hp = 100;
@@ -27,24 +109,24 @@ var Player = function(name, gameState){
     self.gameState = gameState;
 };
 Player.prototype = {
-    name: function(){
+    name: function () {
         return this._name;
     },
-    takeDamage: function(damage){
+    takeDamage: function (damage) {
         var self = this,
             log = self.gameState.log,
             scheduler = self.gameState.scheduler;
         self.hp -= damage;
-        if(self.hp <= 0 ){
+        if (self.hp <= 0) {
             self.isDead = true;
             console.log("%Name has died!".format(self));
             scheduler.remove(self);
         }
     },
-    attack: function(monster){
+    attack: function (monster) {
         var self = this,
             log = self.gameState.log;
-        if(ROT.RNG.getUniform() <= self.hitChance){
+        if (ROT.RNG.getUniform() <= self.hitChance) {
             var damage = Math.floor(ROT.RNG.getUniform() * 10) + 1;
             console.log("%Name hits %Name for %s damage!".format(self, monster, damage));
             monster.takeDamage(damage);
@@ -53,11 +135,11 @@ Player.prototype = {
         }
     },
 
-    act: function(){
+    act: function () {
         var self = this,
             monsters = self.gameState.monsters,
             scheduler = self.gameState.scheduler;
-        if(monsters.length == 0){
+        if (monsters.length == 0) {
             scheduler.remove(self);
         } else {
             self.attack(monsters.random());
@@ -65,10 +147,10 @@ Player.prototype = {
     }
 };
 
-state.player = new Player("Hector", state);
+state.player = new Combatant("Hector", state);
 scheduler.add(state.player, true);
 
-var Monster = function(name, gameState) {
+var Monster = function (name, gameState) {
     var self = this;
     self._name = name;
     self.hp = 10;
@@ -76,38 +158,38 @@ var Monster = function(name, gameState) {
     self.gameState = gameState;
 };
 Monster.prototype = {
-    name: function(){
+    name: function () {
         return this._name;
     },
-    takeDamage: function(damage){
+    takeDamage: function (damage) {
         var self = this,
             log = self.gameState.log,
             scheduler = self.gameState.scheduler;
         self.hp -= damage;
-        if(self.hp <= 0 ){
+        if (self.hp <= 0) {
             self.isDead = true;
             console.log("%Name has died!".format(self));
             scheduler.remove(self);
-            self.gameState.monsters.splice(self.gameState.monsters.indexOf(self),1);
+            self.gameState.monsters.splice(self.gameState.monsters.indexOf(self), 1);
         }
     },
-    attack: function(player){
+    attack: function (player) {
         var self = this,
             log = self.gameState.log;
-        if(ROT.RNG.getUniform() <= self.hitChance){
+        if (ROT.RNG.getUniform() <= self.hitChance) {
             var damage = Math.floor(ROT.RNG.getUniform() * 10) + 1;
-            console.log("%Name hits %Name for %s damage!".format(self, player, ""+damage));
+            console.log("%Name hits %Name for %s damage!".format(self, player, "" + damage));
             player.takeDamage(damage);
         } else {
             console.log("%Name misses %Name with an attack.".format(self, player));
         }
     },
 
-    act: function(){
+    act: function () {
         var self = this,
             player = self.gameState.player,
             scheduler = self.gameState.scheduler;
-        if(player.isDead){
+        if (player.isDead) {
             scheduler.remove(self);
         } else {
             self.attack(player);
@@ -116,9 +198,9 @@ Monster.prototype = {
 };
 
 
-for(var i = 0; i < 5; i++){
+for (var i = 0; i < 5; i++) {
     var name = monsterTypes.random();
-    var monster = new Monster(name, state);
+    var monster = new MonsterCombatant(name, state);
     scheduler.add(monster, true);
     state.monsters.push(monster)
 }

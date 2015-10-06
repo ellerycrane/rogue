@@ -17,6 +17,7 @@ module.exports = function (grunt) {
                 },
                 files: {
                     'dist/rogue.js': ['js/app.js']
+                    //'dist/debug.js': ['js/battle.js']
                 }
             }
         },
@@ -30,6 +31,10 @@ module.exports = function (grunt) {
             default: {
                 src: './js/app.js',
                 dest: './dist/rogue.js'
+            },
+            debug: {
+                src: './js/battle.js',
+                dest: './dist/debug.js'
             }
         },
 
@@ -90,7 +95,7 @@ module.exports = function (grunt) {
         sass: {
             dist: {
                 options: {
-                    require: 'sass-css-importer',
+                    //require: 'sass-css-importer',
                     compass: true
                 },
 
@@ -143,6 +148,12 @@ module.exports = function (grunt) {
     grunt.registerTask('watch-js', [
         'watchify'
     ]);
+
+
+    grunt.registerTask('watch-debug', [
+        'watchify:debug'
+    ]);
+
 
     grunt.registerTask('watch-styles', [
         'concurrent:watchStyles'

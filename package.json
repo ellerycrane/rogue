@@ -14,8 +14,8 @@
   },
   "browserify": {
     "transform": [
-      "reactify",
-      "brfs"
+      "babelify",
+      "reactify"
     ]
   },
   "devDependencies": {
@@ -50,6 +50,7 @@
     "fluxxor": "*",
     "underscore": "*",
     "brfs":"*",
-    "classnames":"*"
+    "classnames":"*",
+    "babelify": "^6.1.0"
   }
 }
